@@ -1,13 +1,24 @@
-module.exports = sequelize => {
-  const { DataTypes } = require('sequelize');
-  return sequelize.define('Application', {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
-    },
-    opportunity_id: { type: DataTypes.INTEGER, allowNull: false },
-    volunteer_id: { type: DataTypes.INTEGER, allowNull: false },
-    status: { type: DataTypes.ENUM('pending','accepted','rejected'), defaultValue: 'pending' }
-  });
-};
+const mongoose = require("mongoose");
+
+const ApplicationSchema = new mongoose.Schema({
+  opportunity_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Opportunity",
+    required: true
+  },
+
+  volunteer_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
+  },
+
+  status: {
+    type: String,
+    enum: ["pending", "accepted", "rejected"],
+    default: "pending"
+  }
+
+}, { timestamps: true });
+
+module.exports = mongoose.model("Application", ApplicationSchema);

@@ -1,14 +1,28 @@
-module.exports = sequelize => {
-  const { DataTypes } = require('sequelize');
-  return sequelize.define('Message', {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
-    },
-    sender_id: { type: DataTypes.INTEGER, allowNull: false },
-    receiver_id: { type: DataTypes.INTEGER, allowNull: false },
-    content: { type: DataTypes.TEXT, allowNull: false },
-    timestamp: { type: DataTypes.DATE, defaultValue: DataTypes.NOW }
-  });
-};
+const mongoose = require("mongoose");
+
+const MessageSchema = new mongoose.Schema({
+  sender_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
+  },
+
+  receiver_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
+  },
+
+  content: {
+    type: String,
+    required: true
+  },
+
+  timestamp: {
+    type: Date,
+    default: Date.now
+  }
+
+}, { timestamps: true });
+
+module.exports = mongoose.model("Message", MessageSchema);
