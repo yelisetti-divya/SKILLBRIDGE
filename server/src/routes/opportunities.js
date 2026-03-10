@@ -1,11 +1,10 @@
-const router = require('express').Router();
-const auth = require('../middleware/auth');
-const ctrl = require('../controllers/opportunityController');
+import express from "express";
+import auth from "../middleware/auth.js";
+import { createOpportunity, getAll } from "../controllers/opportunityController.js";
 
-router.post('/', auth, ctrl.create);
-router.get('/', ctrl.list);
-router.get('/:id', ctrl.get);
-router.put('/:id', auth, ctrl.update);
-router.delete('/:id', auth, ctrl.remove);
+const r = express.Router();
 
-module.exports = router;
+r.post("/", auth, createOpportunity);
+r.get("/", getAll);
+
+export default r;

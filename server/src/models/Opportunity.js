@@ -1,40 +1,10 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const OpportunitySchema = new mongoose.Schema({
-  ngo_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true
-  },
+const oppSchema = new mongoose.Schema({
+  title: String,
+  description: String,
+  location: String,
+  ngoId: mongoose.Schema.Types.ObjectId
+});
 
-  title: {
-    type: String,
-    required: true
-  },
-
-  description: {
-    type: String
-  },
-
-  required_skills: {
-    type: [String],
-    default: []
-  },
-
-  duration: {
-    type: String
-  },
-
-  location: {
-    type: String
-  },
-
-  status: {
-    type: String,
-    enum: ["open", "closed"],
-    default: "open"
-  }
-
-}, { timestamps: true });
-
-module.exports = mongoose.model("Opportunity", OpportunitySchema);
+export default mongoose.model("Opportunity", oppSchema);

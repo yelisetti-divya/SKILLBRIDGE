@@ -1,15 +1,14 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
 import api from "../../services/api";
+import { useNavigate } from "react-router-dom";
 
-export default function Login() {
+export default function Register() {
 
-  const { login } = useAuth();
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
     username: "",
+    email: "",
     password: "",
     role: "volunteer"
   });
@@ -17,24 +16,24 @@ export default function Login() {
   const submit = async (e) => {
     e.preventDefault();
 
-    const res = await api.post("/auth/login", form);
+    await api.post("/auth/register", form);
 
-    login(res.data);
-
-    if (form.role === "ngo") 
-      navigate("/ngo-dashboard");
-    else
-      navigate("/volunteer-dashboard");
+    navigate("/login");
   };
 
   return (
     <form onSubmit={submit}>
-      
-      <h2>Login</h2>
+
+      <h2>Register</h2>
 
       <input 
         placeholder="Username"
         onChange={e => setForm({ ...form, username: e.target.value })}
+      />
+
+      <input 
+        placeholder="Email"
+        onChange={e => setForm({ ...form, email: e.target.value })}
       />
 
       <input 
@@ -43,14 +42,14 @@ export default function Login() {
         onChange={e => setForm({ ...form, password: e.target.value })}
       />
 
-      <select    
+      <select 
         onChange={e => setForm({ ...form, role: e.target.value })}
       >
         <option value="ngo">NGO</option>
         <option value="volunteer">Volunteer</option>
       </select>
 
-      <button>Login</button>
+      <button>Register</button>
 
     </form>
   );

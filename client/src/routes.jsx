@@ -1,52 +1,44 @@
-import { useContext } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import useAuth from './hooks/useAuth';
-import Login from './components/auth/Login';
-import SignupVolunteer from './components/auth/SignupVolunteer';
-import SignupNGO from './components/auth/SignupNGO';
-import ForgotPassword from './components/auth/ForgotPassword';
-import ResetPassword from './components/auth/ResetPassword';
-import EmailVerified from './components/auth/EmailVerified';
-import VerifyEmail from './components/auth/VerifyEmail';
-import VolunteerDashboard from './components/dashboards/Volunteer/VolunteerDashboard';
-import NGODashboard from './components/dashboards/NGO/NGODashboard';
-
-function Private({ children, role }) {
-  const { user } = useAuth();
-  if (!user) return <Navigate to="/login" />;
-  if (role && user.role !== role) return <Navigate to="/" />;
-  return children;
-}
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Login from "./components/auth/Login";
+import Register from "./components/auth/Register";
+import NGODashboard from "./components/dashboards/NGODashboard";
+import VolunteerDashboard from "./components/dashboards/VolunteerDashboard";
+import ProtectedRoute from "./ProtectedRoute";
 
 export default function AppRoutes() {
   return (
     <BrowserRouter>
+
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
+
+        {/* OPEN REGISTER PAGE FIRST */}
+        <Route path="/" element={<Navigate to="/register" />} />
+
+        {/* AUTH ROUTES */}
+        <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/signup/volunteer" element={<SignupVolunteer />} />
-        <Route path="/signup/ngo" element={<SignupNGO />} />
-        <Route path="/forgot" element={<ForgotPassword />} />
-        <Route path="/reset" element={<ResetPassword />} />
-        <Route path="/verify-email" element={<VerifyEmail />} />
-        <Route path="/email-verified" element={<EmailVerified />} />
+
+        {/* ROLE-BASED DASHBOARDS */}
         <Route
-          path="/dashboard/volunteer"
+          path="/ngo-dashboard"
           element={
-            <Private role="volunteer">
-              <VolunteerDashboard />
-            </Private>
-          }
-        />
-        <Route
-          path="/dashboard/ngo"
-          element={
-            <Private role="ngo">
+            <ProtectedRoute>
               <NGODashboard />
-            </Private>
+            </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/volunteer-dashboard"
+          element={
+            <ProtectedRoute>
+              <VolunteerDashboard />
+            </ProtectedRoute>
+          }
+        />
+
       </Routes>
+
     </BrowserRouter>
   );
 }
